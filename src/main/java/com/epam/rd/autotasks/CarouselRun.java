@@ -1,14 +1,14 @@
 package com.epam.rd.autotasks;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 import static com.epam.rd.autotasks.DecrementingCarousel.que;
 import static com.epam.rd.autotasks.DecrementingCarousel.isRunning;
 
 public class CarouselRun{
     int capacity;
     boolean gradualIncrease;
-    int counter = 0;
-    int mainCounter = 1;
-
 
     CarouselRun(int capacity)
     {
@@ -18,35 +18,32 @@ public class CarouselRun{
     CarouselRun(int capacity,boolean gradualIncrease)
     {
         this.capacity = capacity;
-        this.gradualIncrease = true;
+        this.gradualIncrease = gradualIncrease;
+//        System.out.println("I am in");
     }
 
     public int next() {
-        int currentElement = -1 ;
         if(que.isEmpty())
         {
-            return currentElement;
+            return -1;
         }
-        else {
-            currentElement = que.poll();
-//            System.out.println("Current element: "+currentElement+" "+gradualIncrease);
-            if(!gradualIncrease) {
-                 if(currentElement-1 > 0) que.offer(currentElement - 1);
-            }
-            if(gradualIncrease)
-            {
-                if (currentElement-mainCounter > 0) que.offer(currentElement-mainCounter);
-//                System.out.println("Current element: "+(currentElement-mainCounter)+" "+mainCounter);
-                counter++;
-                if(counter % capacity == 0) mainCounter++;
-            }
-            if(que.isEmpty())
-            {
-                isRunning = false;
-                gradualIncrease = false;
-            }
+        Pair p = que.poll();
+        if(!gradualIncrease && (p.val - p.decVal) > 0)
+        {
+            que.offer(new Pair(p.val-p.decVal, p.decVal));
+            return p.val;
         }
-        return  currentElement;
+        else if(gradualIncrease && (p.val - p.decVal) > 0)
+        {
+            que.offer(new Pair(p.val - p.decVal, p.decVal+1));
+            return p.val;
+        }
+        if(que.isEmpty())
+        {
+            isRunning = false;
+            gradualIncrease = false;
+        }
+        return p.val;
     }
 
     public boolean isFinished() {
