@@ -1,9 +1,6 @@
 package com.epam.rd.autotasks;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
-import static com.epam.rd.autotasks.DecrementingCarousel.que;
+import static com.epam.rd.autotasks.DecrementingCarousel.carousalQue;
 import static com.epam.rd.autotasks.DecrementingCarousel.isRunning;
 
 public class CarouselRun{
@@ -18,35 +15,33 @@ public class CarouselRun{
     CarouselRun(int capacity,boolean gradualIncrease)
     {
         this.capacity = capacity;
-        this.gradualIncrease = gradualIncrease;
-//        System.out.println("I am in");
-    }
+        this.gradualIncrease = gradualIncrease;}
 
     public int next() {
-        if(que.isEmpty())
+        if(carousalQue.isEmpty())
         {
             return -1;
         }
-        Pair p = que.poll();
-        if(!gradualIncrease && (p.val - p.decVal) > 0)
+        Pair pairObj = carousalQue.poll();
+        if(!gradualIncrease && (pairObj.val - pairObj.decVal) > 0)
         {
-            que.offer(new Pair(p.val-p.decVal, p.decVal));
-            return p.val;
+            carousalQue.offer(new Pair(pairObj.val-pairObj.decVal, pairObj.decVal));
+            return pairObj.val;
         }
-        else if(gradualIncrease && (p.val - p.decVal) > 0)
+        else if(gradualIncrease && (pairObj.val - pairObj.decVal) > 0)
         {
-            que.offer(new Pair(p.val - p.decVal, p.decVal+1));
-            return p.val;
+            carousalQue.offer(new Pair(pairObj.val - pairObj.decVal, pairObj.decVal+1));
+            return pairObj.val;
         }
-        if(que.isEmpty())
+        if(carousalQue.isEmpty())
         {
             isRunning = false;
             gradualIncrease = false;
         }
-        return p.val;
+        return pairObj.val;
     }
 
     public boolean isFinished() {
-        return que.isEmpty();
+        return carousalQue.isEmpty();
     }
 }

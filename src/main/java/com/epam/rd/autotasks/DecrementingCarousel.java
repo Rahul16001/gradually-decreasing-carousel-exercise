@@ -1,7 +1,6 @@
 package com.epam.rd.autotasks;
 
 import java.util.ArrayDeque;
-import java.util.Scanner;
 
 class Pair
 {
@@ -16,27 +15,26 @@ class Pair
 public class DecrementingCarousel{
 
     static boolean isRunning;
-    static ArrayDeque<Pair> que;
+    static ArrayDeque<Pair> carousalQue;
     final int capacity;
     boolean gradualIncrease;
     public DecrementingCarousel(int cap) {
         isRunning = false;
-        que = new ArrayDeque<>();
+        carousalQue = new ArrayDeque<>();
         capacity = cap;
         gradualIncrease = false;
     }
     public DecrementingCarousel(int cap,boolean gradualIncrease) {
         isRunning = false;
-        que = new ArrayDeque<>();
+        carousalQue = new ArrayDeque<>();
         capacity = cap;
         this.gradualIncrease = gradualIncrease;
     }
 
 
     public boolean addElement(int element){
-        if(isRunning || que.size() == capacity || element <= 0) return false;
-        if(que.offer(new Pair(element,1))) return true;
-        return false;
+        if(isRunning || carousalQue.size() == capacity || element <= 0) return false;
+        return carousalQue.offer(new Pair(element, 1));
     }
 
     public CarouselRun run() {
@@ -45,7 +43,7 @@ public class DecrementingCarousel{
             isRunning = true;
             return new CarouselRun(capacity);
         }
-        else if(!isRunning && gradualIncrease)
+        else if(!isRunning)
         {
             isRunning = true;
             return new CarouselRun(capacity,true);
